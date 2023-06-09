@@ -1,0 +1,110 @@
+import java.awt.image.BufferedImage;
+public class Start_tile extends Tile{
+    private ZEICHENFENSTER window;
+    private MyImage Image;
+    private int[] pos, board_pos;
+    private Player[] players;
+    private Cip cip;
+    private boolean moveable;
+
+    public Start_tile(int[] b_pos_, String num){
+        this.window = ZEICHENFENSTER.gibFenster();
+        this.cip = null;
+        this.players = new Player[4];
+        //laden des Bildes
+        Image  =  new MyImage("/Images/Start_tile_"+num+".png");
+        board_pos = b_pos_;
+        pos = new int[2];
+        calculate_pos(b_pos_, true);
+        moveable = false;
+    }
+
+    protected void calculate_pos(int[] board_pos_, boolean update_board_pos){
+        int image_scale = Image.get_image().getWidth();
+        set_pos(new int[]{board_pos_[1]*image_scale+100,board_pos_[0]*image_scale+35});
+        if(update_board_pos){
+            board_pos = board_pos_;
+        } 
+    }
+
+    public String[] get_available_directions(){
+        switch(Image.get_rotation()){
+            case 1:
+                return new String[]{"Down","Right","Left"};
+            case 2:
+                return new String[]{"Up","Down","Left"};
+            case 3:
+                return new String[]{"Up","Right","Left"};
+            default:
+                return new String[]{"Up","Down","Right"};
+        }
+    }
+
+    public void remove_cip(){
+        cip = null;
+    }
+
+    public void calculate_cip_pos(int row, int column){
+        ;
+    }
+
+    public void draw(){
+        window.zeichneBild(Image.get_image(), pos[0], pos[1]);
+        if(cip != null){
+            cip.draw();
+        }
+        for(int i = 0; i < players.length; i++){
+            if(players[i] != null){
+                players[i].draw();
+            }
+        }
+    }
+
+    public int[] get_pos(){
+        return pos;
+    }
+
+    public void remove_player(int pl_number){
+        players[pl_number] = null;
+    }
+
+    protected void set_pos(int[] new_pos){
+        pos = new_pos;
+    }
+
+    public int get_rotation(){
+        return Image.get_rotation();
+    }
+
+    public void rotate(){
+        Image.rotate();
+    }
+
+    public void set_player(Player pl, int player_num){
+        players[player_num] = pl;
+    }
+
+    public void set_cip(Cip ci){
+        cip = ci;
+    }   
+
+    public boolean get_moveable(){
+        return moveable;
+    }
+
+    public Player[] get_Players(){
+        return players;
+    }
+
+    public Cip get_cip(){
+        return cip;
+    }
+
+    public int[] get_board_pos(){
+        return board_pos;
+    }
+    
+    public BufferedImage get_image(){
+        return Image.get_image();
+    }
+}
